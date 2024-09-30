@@ -70,6 +70,7 @@ app.post('/login', async (req, res) => {
     const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: '1h' });
 
     res.json({ token });
+    //testing
 });
 
 app.listen(port, '0.0.0.0', () => {
