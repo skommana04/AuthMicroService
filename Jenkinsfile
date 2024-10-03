@@ -22,7 +22,7 @@ pipeline {
         stage('Git Checkout authdeploy') {
             steps {
                 dir('authdeploy') {  // Checkout into the 'authdeploy' directory
-                    git changelog: false, credentialsId: 'git-cred', poll: false, url: 'https://github.com/skommana04/authdeploy.git'
+                    git branch: 'main', changelog: false, credentialsId: 'git-cred', poll: false, url: 'https://github.com/skommana04/authdeploy.git'
                 }
             }
         }
