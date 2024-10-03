@@ -13,7 +13,7 @@ pipeline {
 
         stage('Git Checkout AuthMicroService') {
             steps {
-                dir('AuthMicroService') {  // Specify a directory for the first repo
+                dir('AuthMicroService') {  // Checkout into the 'AuthMicroService' directory
                     git changelog: false, credentialsId: 'git-cred', poll: false, url: 'https://github.com/skommana04/AuthMicroService.git'
                 }
             }
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Git Checkout authdeploy') {
             steps {
-                dir('authdeploy') {  // Specify a different directory for the second repo
+                dir('authdeploy') {  // Checkout into the 'authdeploy' directory
                     git changelog: false, credentialsId: 'git-cred', poll: false, url: 'https://github.com/skommana04/authdeploy.git'
                 }
             }
@@ -29,12 +29,14 @@ pipeline {
 
         stage('Docker Build & Test') {
             steps {
-                script {
-                    def imageVersion = "v${env.BUILD_NUMBER}"
-                    withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
-                        sh "docker build -t medhakommana/auth931:${imageVersion} -f Dockerfile ."
-                        sh "docker push medhakommana/auth931:${imageVersion}"
+                dir('AuthMicroService') {  // Ensure you're in the correct directory for Docker build
+                    script {
+                        def imageVersion = "v${env.BUILD_NUMBER}"
+                        withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                            sh "docker build -t medhakommana/auth931:${imageVersion} -f Dockerfile ."
+                            sh "docker push medhakommana/auth931:${imageVersion}"
+                        }
                     }
                 }
             }
@@ -46,7 +48,7 @@ pipeline {
                 GIT_USER_NAME = "skommana04"
             }
             steps {
-                dir('authdeploy') {  // Ensure you are in the correct directory for this repository
+                dir('authdeploy') {  // Ensure you're in the correct directory for authdeploy
                     withCredentials([string(credentialsId: 'git-cred', variable: 'GITHUB_TOKEN')]) {
                         script {
                             def imageVersion = "v${env.BUILD_NUMBER}"
