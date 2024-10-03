@@ -1,8 +1,2 @@
-edNodeJS micro service project for handling user authentication.
+NodeJS micro service project for handling user authentication.
 
-
-
-
-
-ti
-x
