@@ -2,6 +2,14 @@ pipeline {
     agent any
 
     stages {
+        stage('Check Workspace') {
+            steps {
+                script {
+                    echo "The workspace is located at: ${env.WORKSPACE}"
+                    sh 'ls -l ${WORKSPACE}'  // List the contents of the workspace
+                }
+            }
+        }
         stage('Git Checkout') {
             steps {
                 git changelog: false, credentialsId: 'git-cred', poll: false, url: 'https://github.com/skommana04/AuthMicroService.git'
