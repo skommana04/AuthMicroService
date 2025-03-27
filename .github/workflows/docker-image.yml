@@ -72,4 +72,4 @@ jobs:
            git config --global user.name "skommana04"
            git add .
            git commit -m "image updated"
-           git push https://x-access-token:${GITHUB_TOKEN}@github.com/skommana04/authdeploy.git HEAD:master
+           git push https://x-access-token:${GITHUB_TOKEN}@github.com/skommana04/authdeploy.git HEAD:main
