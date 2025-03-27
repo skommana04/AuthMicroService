@@ -57,3 +57,15 @@ jobs:
 
       - name: Push Docker image
         run: docker push medhakommana/auth930:${{ env.TAG }}
+
+      - name: Image update
+        run: |
+           git clone https://github.com/skommana04/authdeploy.git
+           sed -i "s|image:.*|image: medhakommana/auth930:${{ env.TAG }}|g" authdeploy/authms-deployment.yml
+
+      - name: push the updated image in manifest files repo
+        run: |
+           cd authdeploy
+           git add .
+           git commit -m "image updated"
+           git push origin master
